@@ -1,0 +1,395 @@
+{% extends "layout.html" %}
+
+{% block title %}Face Database{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12 d-flex justify-content-between align-items-center">
+        <h2 class="neon-heading mb-0">👤 Face Database Management</h2>
+        <button class="btn btn-cyber" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">
+            <i class="bi bi-person-plus"></i> Add New Employee
+        </button>
+    </div>
+</div>
+
+<!-- Search and Filter Bar -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="cyber-card">
+            <div class="cyber-card-body">
+                <div class="row align-items-end">
+                    <div class="col-md-5">
+                        <label class="form-label text-muted">Search Employee</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-dark border-secondary">
+                                <i class="bi bi-search"></i>
+                            </span>
+                            <input type="text" class="form-control bg-dark text-light border-secondary" id="searchInput"
+                                placeholder="Name, ID, or Department...">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label text-muted">Department</label>
+                        <select class="form-control bg-dark text-light border-secondary" id="deptFilter">
+                            <option>All Departments</option>
+                            <option>IT Development</option>
+                            <option>Sales & Marketing</option>
+                            <option>Human Resources</option>
+                            <option>Operations</option>
+                            <option>Management</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label text-muted">Status</label>
+                        <select class="form-control bg-dark text-light border-secondary" id="statusFilter">
+                            <option>All Status</option>
+                            <option>Active</option>
+                            <option>Inactive</option>
+                            <option>On Leave</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-outline-light w-100" onclick="resetFilters()">
+                            <i class="bi bi-arrow-clockwise"></i> Reset
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Stats Summary -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="kpi-card">
+            <div class="kpi-label">Total Employees</div>
+            <div class="kpi-value text-info">50</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="kpi-card">
+            <div class="kpi-label">Active Today</div>
+            <div class="kpi-value text-success">42</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="kpi-card">
+            <div class="kpi-label">Faces Enrolled</div>
+            <div class="kpi-value" style="color: var(--primary-neon);">48</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="kpi-card">
+            <div class="kpi-label">Pending Review</div>
+            <div class="kpi-value text-warning">2</div>
+        </div>
+    </div>
+</div>
+
+<!-- Employee Cards Grid -->
+<div class="row" id="employeeGrid">
+    <!-- Employee Card 1 -->
+    <div class="col-md-4 col-lg-3 mb-4 employee-card" data-dept="Management" data-status="Active">
+        <div class="cyber-card h-100">
+            <div class="cyber-card-body text-center">
+                <div class="mb-3 position-relative">
+                    <div class="employee-avatar mx-auto"
+                        style="width: 100px; height: 100px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; color: white;">
+                        MC
+                    </div>
+                    <span class="badge bg-success position-absolute"
+                        style="bottom: 5px; right: calc(50% - 60px);">Active</span>
+                </div>
+                <h6 class="mb-1" style="color: var(--primary-neon);">Mindii Chenaya</h6>
+                <small class="text-muted">ID: EMP-001</small>
+                <div class="mt-2 mb-3">
+                    <span class="badge bg-dark border border-secondary">Management</span>
+                </div>
+                <div class="d-flex justify-content-around text-muted small mb-3">
+                    <div>
+                        <i class="bi bi-camera"></i> 4 Faces
+                    </div>
+                    <div>
+                        <i class="bi bi-check-circle"></i> 98%
+                    </div>
+                </div>
+                <div class="btn-group w-100" role="group">
+                    <button class="btn btn-sm btn-outline-light" onclick="viewEmployee('Mindii Chenaya')">
+                        <i class="bi bi-eye"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-light" onclick="editEmployee('Mindii Chenaya')">
+                        <i class="bi bi-pencil"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger" onclick="deleteEmployee('Mindii Chenaya')">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Employee Card 2 -->
+    <div class="col-md-4 col-lg-3 mb-4 employee-card" data-dept="Sales & Marketing" data-status="Active">
+        <div class="cyber-card h-100">
+            <div class="cyber-card-body text-center">
+                <div class="mb-3 position-relative">
+                    <div class="employee-avatar mx-auto"
+                        style="width: 100px; height: 100px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; color: white;">
+                        JS
+                    </div>
+                    <span class="badge bg-success position-absolute"
+                        style="bottom: 5px; right: calc(50% - 60px);">Active</span>
+                </div>
+                <h6 class="mb-1" style="color: var(--primary-neon);">Jane Smith</h6>
+                <small class="text-muted">ID: EMP-002</small>
+                <div class="mt-2 mb-3">
+                    <span class="badge bg-dark border border-secondary">Sales & Marketing</span>
+                </div>
+                <div class="d-flex justify-content-around text-muted small mb-3">
+                    <div>
+                        <i class="bi bi-camera"></i> 3 Faces
+                    </div>
+                    <div>
+                        <i class="bi bi-check-circle"></i> 95%
+                    </div>
+                </div>
+                <div class="btn-group w-100" role="group">
+                    <button class="btn btn-sm btn-outline-light" onclick="viewEmployee('Jane Smith')">
+                        <i class="bi bi-eye"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-light" onclick="editEmployee('Jane Smith')">
+                        <i class="bi bi-pencil"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger" onclick="deleteEmployee('Jane Smith')">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Employee Card 3 -->
+    <div class="col-md-4 col-lg-3 mb-4 employee-card" data-dept="IT Development" data-status="Active">
+        <div class="cyber-card h-100">
+            <div class="cyber-card-body text-center">
+                <div class="mb-3 position-relative">
+                    <div class="employee-avatar mx-auto"
+                        style="width: 100px; height: 100px; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; color: white;">
+                        MR
+                    </div>
+                    <span class="badge bg-success position-absolute"
+                        style="bottom: 5px; right: calc(50% - 60px);">Active</span>
+                </div>
+                <h6 class="mb-1" style="color: var(--primary-neon);">Mike Ross</h6>
+                <small class="text-muted">ID: EMP-003</small>
+                <div class="mt-2 mb-3">
+                    <span class="badge bg-dark border border-secondary">IT Development</span>
+                </div>
+                <div class="d-flex justify-content-around text-muted small mb-3">
+                    <div>
+                        <i class="bi bi-camera"></i> 5 Faces
+                    </div>
+                    <div>
+                        <i class="bi bi-check-circle"></i> 99%
+                    </div>
+                </div>
+                <div class="btn-group w-100" role="group">
+                    <button class="btn btn-sm btn-outline-light" onclick="viewEmployee('Mike Ross')">
+                        <i class="bi bi-eye"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-light" onclick="editEmployee('Mike Ross')">
+                        <i class="bi bi-pencil"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger" onclick="deleteEmployee('Mike Ross')">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Employee Card 4 -->
+    <div class="col-md-4 col-lg-3 mb-4 employee-card" data-dept="Operations" data-status="Active">
+        <div class="cyber-card h-100">
+            <div class="cyber-card-body text-center">
+                <div class="mb-3 position-relative">
+                    <div class="employee-avatar mx-auto"
+                        style="width: 100px; height: 100px; background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; color: white;">
+                        HS
+                    </div>
+                    <span class="badge bg-success position-absolute"
+                        style="bottom: 5px; right: calc(50% - 60px);">Active</span>
+                </div>
+                <h6 class="mb-1" style="color: var(--primary-neon);">Harvey Specter</h6>
+                <small class="text-muted">ID: EMP-004</small>
+                <div class="mt-2 mb-3">
+                    <span class="badge bg-dark border border-secondary">Operations</span>
+                </div>
+                <div class="d-flex justify-content-around text-muted small mb-3">
+                    <div>
+                        <i class="bi bi-camera"></i> 4 Faces
+                    </div>
+                    <div>
+                        <i class="bi bi-check-circle"></i> 97%
+                    </div>
+                </div>
+                <div class="btn-group w-100" role="group">
+                    <button class="btn btn-sm btn-outline-light" onclick="viewEmployee('Harvey Specter')">
+                        <i class="bi bi-eye"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-light" onclick="editEmployee('Harvey Specter')">
+                        <i class="bi bi-pencil"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger" onclick="deleteEmployee('Harvey Specter')">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Employee Card 5 -->
+    <div class="col-md-4 col-lg-3 mb-4 employee-card" data-dept="Human Resources" data-status="On Leave">
+        <div class="cyber-card h-100">
+            <div class="cyber-card-body text-center">
+                <div class="mb-3 position-relative">
+                    <div class="employee-avatar mx-auto"
+                        style="width: 100px; height: 100px; background: linear-gradient(135deg, #30cfd0 0%, #330867 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; color: white;">
+                        LL
+                    </div>
+                    <span class="badge bg-warning position-absolute" style="bottom: 5px; right: calc(50% - 60px);">On
+                        Leave</span>
+                </div>
+                <h6 class="mb-1" style="color: var(--primary-neon);">Louis Litt</h6>
+                <small class="text-muted">ID: EMP-005</small>
+                <div class="mt-2 mb-3">
+                    <span class="badge bg-dark border border-secondary">Human Resources</span>
+                </div>
+                <div class="d-flex justify-content-around text-muted small mb-3">
+                    <div>
+                        <i class="bi bi-camera"></i> 3 Faces
+                    </div>
+                    <div>
+                        <i class="bi bi-check-circle"></i> 94%
+                    </div>
+                </div>
+                <div class="btn-group w-100" role="group">
+                    <button class="btn btn-sm btn-outline-light" onclick="viewEmployee('Louis Litt')">
+                        <i class="bi bi-eye"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-light" onclick="editEmployee('Louis Litt')">
+                        <i class="bi bi-pencil"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger" onclick="deleteEmployee('Louis Litt')">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Employee Modal -->
+<div class="modal fade" id="addEmployeeModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark text-light border border-secondary">
+            <div class="modal-header border-secondary">
+                <h5 class="modal-title"><i class="bi bi-person-plus"></i> Add New Employee</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" class="form-control bg-dark text-light border-secondary"
+                            placeholder="Enter full name">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Employee ID</label>
+                        <input type="text" class="form-control bg-dark text-light border-secondary"
+                            placeholder="EMP-XXX">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Department</label>
+                        <select class="form-control bg-dark text-light border-secondary">
+                            <option>IT Development</option>
+                            <option>Sales & Marketing</option>
+                            <option>Human Resources</option>
+                            <option>Operations</option>
+                            <option>Management</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Upload Face Images</label>
+                        <input type="file" class="form-control bg-dark text-light border-secondary" multiple
+                            accept="image/*">
+                        <small class="text-muted">Upload 3-5 face images for better accuracy</small>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer border-secondary">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-cyber" onclick="addNewEmployee()">Add Employee</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function viewEmployee(name) {
+        alert(`Viewing profile for: ${name}`);
+    }
+
+    function editEmployee(name) {
+        alert(`Editing profile for: ${name}`);
+    }
+
+    function deleteEmployee(name) {
+        if (confirm(`Are you sure you want to delete ${name}?`)) {
+            alert(`Employee ${name} deleted`);
+        }
+    }
+
+    function addNewEmployee() {
+        alert('New employee added successfully!');
+        const modal = bootstrap.Modal.getInstance(document.getElementById('addEmployeeModal'));
+        modal.hide();
+    }
+
+    function resetFilters() {
+        document.getElementById('searchInput').value = '';
+        document.getElementById('deptFilter').selectedIndex = 0;
+        document.getElementById('statusFilter').selectedIndex = 0;
+        filterEmployees();
+    }
+
+    function filterEmployees() {
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        const deptFilter = document.getElementById('deptFilter').value;
+        const statusFilter = document.getElementById('statusFilter').value;
+
+        document.querySelectorAll('.employee-card').forEach(card => {
+            const dept = card.getAttribute('data-dept');
+            const status = card.getAttribute('data-status');
+            const name = card.querySelector('h6').textContent.toLowerCase();
+
+            const matchesSearch = name.includes(searchTerm);
+            const matchesDept = deptFilter === 'All Departments' || dept === deptFilter;
+            const matchesStatus = statusFilter === 'All Status' || status === statusFilter;
+
+            if (matchesSearch && matchesDept && matchesStatus) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+
+    // Add event listeners
+    document.getElementById('searchInput').addEventListener('input', filterEmployees);
+    document.getElementById('deptFilter').addEventListener('change', filterEmployees);
+    document.getElementById('statusFilter').addEventListener('change', filterEmployees);
+</script>
+
+{% endblock %}

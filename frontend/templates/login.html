@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block title %}Authentication{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <div class="login-box cyber-card">
+        <h2 class="text-center mb-4 neon-heading">System Access</h2>
+
+        {% if error %}
+        <div class="alert alert-danger" role="alert"
+            style="background: transparent; border-color: var(--secondary-neon); color: var(--secondary-neon);">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        <form method="POST">
+            <div class="mb-3">
+                <label for="username" class="form-label" style="columns: var(--primary-neon);">Agent ID</label>
+                <input type="text" class="form-control form-control-cyber" id="username" name="username"
+                    placeholder="Enter ID" required>
+            </div>
+            <div class="mb-4">
+                <label for="password" class="form-label" style="columns: var(--primary-neon);">Access Key</label>
+                <input type="password" class="form-control form-control-cyber" id="password" name="password"
+                    placeholder="Enter Key" required>
+            </div>
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-cyber">Initiate Connection</button>
+            </div>
+        </form>
+
+        <div class="mt-3 text-center text-muted">
+            <small>SECURE CONNECTION: ENCRYPTED</small>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,263 @@
+{% extends "layout.html" %}
+
+{% block title %}Reports Center{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12 d-flex justify-content-between align-items-center">
+        <h2 class="neon-heading mb-0">📄 Reporting Center</h2>
+        <button class="btn btn-cyber" onclick="generateReport()">
+            <i class="bi bi-file-earmark-arrow-down"></i> Generate New Report
+        </button>
+    </div>
+</div>
+
+<!-- Report Generator Cards -->
+<div class="row mb-4">
+    <!-- Daily Report -->
+    <div class="col-md-4">
+        <div class="cyber-card h-100">
+            <div class="cyber-card-body text-center">
+                <div class="mb-3" style="font-size: 3rem;">📊</div>
+                <h4 class="mb-3">Daily Activity Report</h4>
+                <p class="text-muted mb-4">24-hour surveillance summary with attendance, alerts, and incidents</p>
+                <button class="btn btn-outline-light w-100 mb-2" onclick="generateReportType('daily')">
+                    <i class="bi bi-calendar-day"></i> Generate Daily
+                </button>
+                <small class="text-muted">Last: Today 08:00</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Weekly Report -->
+    <div class="col-md-4">
+        <div class="cyber-card h-100">
+            <div class="cyber-card-body text-center">
+                <div class="mb-3" style="font-size: 3rem;">📈</div>
+                <h4 class="mb-3">Weekly Analytics</h4>
+                <p class="text-muted mb-4">7-day productivity trends, zone heatmaps, and pattern analysis</p>
+                <button class="btn btn-outline-light w-100 mb-2" onclick="generateReportType('weekly')">
+                    <i class="bi bi-calendar-week"></i> Generate Weekly
+                </button>
+                <small class="text-muted">Last: Mon 00:00</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Monthly Report -->
+    <div class="col-md-4">
+        <div class="cyber-card h-100">
+            <div class="cyber-card-body text-center">
+                <div class="mb-3" style="font-size: 3rem;">📑</div>
+                <h4 class="mb-3">Monthly Summary</h4>
+                <p class="text-muted mb-4">Complete monthly overview, compliance reports, and insights</p>
+                <button class="btn btn-outline-light w-100 mb-2" onclick="generateReportType('monthly')">
+                    <i class="bi bi-calendar-month"></i> Generate Monthly
+                </button>
+                <small class="text-muted">Last: 1st of Month</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Custom Report Builder -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="cyber-card">
+            <div class="cyber-card-body">
+                <h5 class="mb-4"><i class="bi bi-sliders"></i> Custom Report Builder</h5>
+                <div class="row">
+                    <div class="col-md-3">
+                        <label class="form-label text-muted">Date Range</label>
+                        <select class="form-control bg-dark text-light border-secondary">
+                            <option>Last 24 Hours</option>
+                            <option>Last 7 Days</option>
+                            <option>Last 30 Days</option>
+                            <option>Custom Range</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label text-muted">Zone Filter</label>
+                        <select class="form-control bg-dark text-light border-secondary">
+                            <option>All Zones</option>
+                            <option>Working Areas Only</option>
+                            <option>Restricted Areas</option>
+                            <option>Select Specific...</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label text-muted">Report Type</label>
+                        <select class="form-control bg-dark text-light border-secondary">
+                            <option>Security Summary</option>
+                            <option>Attendance Log</option>
+                            <option>Incident Report</option>
+                            <option>Performance Analytics</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label text-muted">Export Format</label>
+                        <select class="form-control bg-dark text-light border-secondary">
+                            <option>PDF Document</option>
+                            <option>Excel Spreadsheet</option>
+                            <option>CSV Data</option>
+                            <option>JSON Export</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="text-end mt-3">
+                    <button class="btn btn-cyber" onclick="generateCustomReport()">
+                        <i class="bi bi-gear"></i> Build Custom Report
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Reports History -->
+<div class="row">
+    <div class="col-12">
+        <div class="cyber-card">
+            <div class="cyber-card-body p-0">
+                <div class="p-3 border-bottom border-secondary d-flex justify-content-between align-items-center">
+                    <h5 class="m-0"><i class="bi bi-clock-history"></i> Report History</h5>
+                    <span class="badge bg-success">12 Reports This Month</span>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover mb-0">
+                        <thead>
+                            <tr style="border-bottom: 2px solid var(--primary-neon);">
+                                <th>Report Name</th>
+                                <th>Type</th>
+                                <th>Date Range</th>
+                                <th>Generated</th>
+                                <th>Size</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reportHistory">
+                            <tr>
+                                <td><i class="bi bi-file-pdf text-danger"></i> Daily_Activity_2026-01-08.pdf</td>
+                                <td><span class="badge bg-info">Daily</span></td>
+                                <td>Jan 8, 2026</td>
+                                <td>Today, 08:00</td>
+                                <td>2.4 MB</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-light"><i class="bi bi-download"></i></button>
+                                    <button class="btn btn-sm btn-outline-light"><i class="bi bi-eye"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><i class="bi bi-file-excel text-success"></i> Weekly_Analytics_W01.xlsx</td>
+                                <td><span class="badge bg-primary">Weekly</span></td>
+                                <td>Jan 1-7, 2026</td>
+                                <td>Jan 7, 23:59</td>
+                                <td>5.1 MB</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-light"><i class="bi bi-download"></i></button>
+                                    <button class="btn btn-sm btn-outline-light"><i class="bi bi-eye"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><i class="bi bi-file-pdf text-danger"></i> Security_Incidents_Jan07.pdf</td>
+                                <td><span class="badge bg-warning text-dark">Incident</span></td>
+                                <td>Jan 7, 2026</td>
+                                <td>Jan 7, 18:30</td>
+                                <td>1.8 MB</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-light"><i class="bi bi-download"></i></button>
+                                    <button class="btn btn-sm btn-outline-light"><i class="bi bi-eye"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><i class="bi bi-file-earmark-text text-light"></i> Attendance_Summary_W01.csv</td>
+                                <td><span class="badge bg-secondary">Attendance</span></td>
+                                <td>Jan 1-7, 2026</td>
+                                <td>Jan 7, 17:00</td>
+                                <td>124 KB</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-light"><i class="bi bi-download"></i></button>
+                                    <button class="btn btn-sm btn-outline-light"><i class="bi bi-eye"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><i class="bi bi-file-pdf text-danger"></i> Monthly_Overview_Dec2025.pdf</td>
+                                <td><span class="badge bg-danger">Monthly</span></td>
+                                <td>Dec 1-31, 2025</td>
+                                <td>Jan 1, 00:01</td>
+                                <td>8.7 MB</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-light"><i class="bi bi-download"></i></button>
+                                    <button class="btn btn-sm btn-outline-light"><i class="bi bi-eye"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function generateReportType(type) {
+        const typeNames = {
+            'daily': 'Daily Activity Report',
+            'weekly': 'Weekly Analytics Report',
+            'monthly': 'Monthly Summary Report'
+        };
+
+        showNotification(`Generating ${typeNames[type]}...`, 'info');
+
+        // Simulate report generation
+        setTimeout(() => {
+            showNotification(`✅ ${typeNames[type]} generated successfully!`, 'success');
+        }, 2000);
+    }
+
+    function generateCustomReport() {
+        showNotification('Building custom report with selected parameters...', 'info');
+
+        setTimeout(() => {
+            showNotification('✅ Custom report generated successfully!', 'success');
+        }, 2500);
+    }
+
+    function generateReport() {
+        generateReportType('daily');
+    }
+
+    function showNotification(message, type) {
+        // Create notification element
+        const notification = document.createElement('div');
+        notification.className = `alert alert-${type === 'info' ? 'info' : 'success'} position-fixed`;
+        notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px; animation: slideInRight 0.3s ease-out;';
+        notification.innerHTML = `
+        <i class="bi bi-${type === 'info' ? 'info-circle' : 'check-circle'}"></i> ${message}
+    `;
+
+        document.body.appendChild(notification);
+
+        // Auto remove after 3 seconds
+        setTimeout(() => {
+            notification.style.animation = 'slideOutRight 0.3s ease-out';
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
+    }
+
+    // Add animation keyframes
+    const style = document.createElement('style');
+    style.textContent = `
+    @keyframes slideInRight {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes slideOutRight {
+        from { transform: translateX(0); opacity: 1; }
+        to { transform: translateX(100%); opacity: 0; }
+    }
+`;
+    document.head.appendChild(style);
+</script>
+
+{% endblock %}

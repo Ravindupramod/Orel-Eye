@@ -1,0 +1,132 @@
+{% extends "layout.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<!-- Surveillance Module -->
+<div class="col-md-3">
+    <div class="cyber-card h-100 text-center">
+        <div class="cyber-card-body">
+            <h1 class="display-4 mb-3">👁️</h1>
+            <h4 class="mb-3">Monitor</h4>
+            <a href="{{ url_for('monitor') }}" class="btn btn-cyber w-100">Live Grid</a>
+        </div>
+    </div>
+</div>
+
+<!-- Tracking Module -->
+<div class="col-md-3">
+    <div class="cyber-card h-100 text-center">
+        <div class="cyber-card-body">
+            <h1 class="display-4 mb-3">🎯</h1>
+            <h4 class="mb-3">Tracker</h4>
+            <a href="{{ url_for('track_page') }}" class="btn btn-cyber w-100">Find Staff</a>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Attendance -->
+<div class="col-md-3">
+    <div class="cyber-card h-100 text-center">
+        <div class="cyber-card-body">
+            <h1 class="display-4 mb-3">👥</h1>
+            <h4 class="mb-3">Attendance</h4>
+            <div class="d-flex justify-content-center align-items-baseline mb-3">
+                <span class="h2 text-info mb-0" id="dashPresent">--</span>
+                <span class="text-muted ms-2">/ <span id="dashTotal">--</span></span>
+            </div>
+            <div class="progress" style="height: 5px;">
+                <div class="progress-bar bg-info" id="dashProg" style="width: 0%"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- System Health -->
+<div class="col-md-3">
+    <div class="cyber-card h-100">
+        <div class="cyber-card-body">
+            <h4 class="mb-3 text-center"><i class="bi bi-cpu"></i> Health</h4>
+            <div class="d-flex justify-content-between mb-2">
+                <span class="text-muted">Server</span>
+                <span class="text-success" id="dashServer">Online</span>
+            </div>
+            <div class="d-flex justify-content-between mb-2">
+                <span class="text-muted">Latency</span>
+                <span style="color: var(--primary-neon);" id="dashLatency">--ms</span>
+            </div>
+            <div class="d-flex justify-content-between mb-2">
+                <span class="text-muted">Storage</span>
+                <span class="text-warning" id="dashStorage">--%</span>
+            </div>
+            <div class="d-flex justify-content-between">
+                <span class="text-muted">AI Core</span>
+                <span class="text-success" id="dashAI">Active</span>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- Bottom Row: Alerts Feed -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="cyber-card">
+            <div class="cyber-card-body p-0">
+                <div class="p-3 border-bottom border-secondary d-flex justify-content-between align-items-center">
+                    <h5 class="m-0 text-uppercase text-danger"><i class="bi bi-exclamation-triangle"></i> Recent
+                        Security Alerts</h5>
+                    <a href="{{ url_for('analytics') }}" class="btn btn-sm btn-outline-light">View All</a>
+                </div>
+                <div class="alerts-feed p-3" style="height: 200px;">
+                    <!-- Static Mock for now, dynamic updates later -->
+                    <div class="alert-item high">
+                        <span class="alert-time">[14:32]</span>
+                        <span class="alert-event">Restricted Access: Server Room (Unauthorized)</span>
+                        <span class="badge bg-warning text-dark">HIGH</span>
+                    </div>
+                    <div class="alert-item medium">
+                        <span class="alert-time">[13:15]</span>
+                        <span class="alert-event">Unknown Person Detected: Main Lobby</span>
+                        <span class="badge bg-info text-dark">MED</span>
+                    </div>
+                    <div class="alert-item critical">
+                        <span class="alert-time">[11:45]</span>
+                        <span class="alert-event">Door Forced Open: Rear Exit</span>
+                        <span class="badge bg-danger">CRIT</span>
+                    </div>
+                    <div class="alert-item low">
+                        <span class="alert-time">[09:10]</span>
+                        <span class="alert-event">Camera Signal Lost: Working Area 4</span>
+                        <span class="badge bg-secondary">LOW</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Fetch Quick Stats
+        fetch('/api/quick_stats')
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('dashPresent').innerText = data.present_count;
+                document.getElementById('dashTotal').innerText = data.total_employees;
+                const pct = (data.present_count / data.total_employees) * 100;
+                document.getElementById('dashProg').style.width = pct + '%';
+            });
+
+        // Fetch System Health
+        fetch('/api/system_health')
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('dashServer').innerText = data.server_status;
+                document.getElementById('dashLatency').innerText = data.latency_ms + 'ms';
+                document.getElementById('dashStorage').innerText = data.storage_usage_percent + '%';
+                document.getElementById('dashAI').innerText = data.ai_status;
+            });
+    });
+</script>
+{% endblock %}

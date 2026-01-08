@@ -1,0 +1,125 @@
+{% extends "layout.html" %}
+
+{% block title %}Facility Map{% endblock %}
+
+{% block content %}
+<div class="row h-100">
+    <div class="col-12 text-center mb-3">
+        <h2 class="neon-heading">Live Facility Map</h2>
+        <p class="text-muted">Real-time personnel location tracking</p>
+    </div>
+
+    <div class="col-12 d-flex justify-content-center">
+        <!-- Map Container -->
+        <div id="mapContainer" class="cyber-card"
+            style="width: 1000px; height: 600px; position: relative; background: #0a0a0a; overflow: hidden;">
+
+            <!-- Grid Lines (Blueprint effect) -->
+            <div
+                style="position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px); background-size: 40px 40px;">
+            </div>
+
+            <!-- Walls (Simulated with simple CSS borders/divs) -->
+            <!-- Main Hall -->
+            <div
+                style="position: absolute; left: 10%; top: 10%; width: 80%; height: 80%; border: 2px solid var(--primary-neon); opacity: 0.5;">
+            </div>
+            <!-- Office 1 -->
+            <div
+                style="position: absolute; left: 10%; top: 10%; width: 20%; height: 30%; border-right: 2px solid var(--primary-neon); border-bottom: 2px solid var(--primary-neon);">
+                <div class="map-label">OFFICE A</div>
+            </div>
+            <!-- Server Room (Restricted) -->
+            <div
+                style="position: absolute; right: 10%; bottom: 10%; width: 15%; height: 20%; border: 2px solid var(--secondary-neon); background: rgba(255, 0, 255, 0.1);">
+                <div class="map-label" style="color: var(--secondary-neon);">SERVER RM</div>
+            </div>
+
+            <!-- Cameras -->
+            <!-- Randomly placing some camera icons for effect -->
+            <div class="camera-icon" style="left: 15%; top: 15%;" title="Cam 1">🎥</div>
+            <div class="camera-icon" style="left: 85%; top: 15%;" title="Cam 2">🎥</div>
+            <div class="camera-icon" style="left: 15%; bottom: 15%;" title="Cam 3">🎥</div>
+            <div class="camera-icon" style="right: 12%; bottom: 12%; color: var(--secondary-neon);"
+                title="Restricted Cam">🎥</div>
+
+            <!-- Dynamic Dots Container -->
+            <div id="dotsLayer"></div>
+
+        </div>
+    </div>
+</div>
+
+<style>
+    .map-label {
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        font-size: 0.8rem;
+        color: var(--primary-neon);
+        font-family: 'Orbitron', monospace;
+    }
+
+    .camera-icon {
+        position: absolute;
+        font-size: 1.5rem;
+        color: var(--primary-neon);
+        opacity: 0.7;
+        transform: translate(-50%, -50%);
+    }
+
+    .person-dot {
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        background: white;
+        border-radius: 50%;
+        box-shadow: 0 0 10px white;
+        transition: all 1s linear;
+        /* Smooth movement */
+        z-index: 10;
+        cursor: pointer;
+    }
+
+    .person-dot::after {
+        content: attr(data-name);
+        position: absolute;
+        top: -20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.8);
+        padding: 2px 5px;
+        border-radius: 4px;
+        font-size: 10px;
+        white-space: nowrap;
+        border: 1px solid var(--primary-neon);
+    }
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function updateMap() {
+        console.log("Updating Map Positions...");
+        fetch('/api/map_data')
+            .then(res => res.json())
+            .then(dots => {
+                const container = document.getElementById('dotsLayer');
+                container.innerHTML = ''; // Clear old dots (In production, update coordinates instead of full redraw for smoother anim)
+
+                dots.forEach(dot => {
+                    const el = document.createElement('div');
+                    el.className = 'person-dot';
+                    el.style.left = dot.x + '%';
+                    el.style.top = dot.y + '%';
+                    el.setAttribute('data-name', dot.name);
+                    container.appendChild(el);
+                });
+            });
+    }
+
+    // Update every 2 seconds
+    setInterval(updateMap, 2000);
+    updateMap();
+</script>
+{% endblock %}

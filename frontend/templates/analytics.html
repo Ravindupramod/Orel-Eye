@@ -1,0 +1,238 @@
+{% extends "layout.html" %}
+
+{% block title %}System Analytics{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12 d-flex justify-content-between align-items-center">
+        <h2 class="neon-heading mb-0">Command Center Analytics</h2>
+        <div class="analytics-controls">
+            <div class="control-group">
+                <select class="cyber-select">
+                    <option>Today</option>
+                    <option>Last 7 Days</option>
+                    <option>This Month</option>
+                    <option>Custom Range</option>
+                </select>
+                <select class="cyber-select">
+                    <option>All Zones</option>
+                    <option>Hardware Lab</option>
+                    <option>Server Room</option>
+                    <option>Lobby</option>
+                </select>
+            </div>
+            <button class="btn btn-cyber ms-3"><i class="bi bi-download"></i> Export Report</button>
+        </div>
+    </div>
+</div>
+
+<!-- 2. KPI Cards Row -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="kpi-card">
+            <div class="kpi-label">Live Occupancy</div>
+            <div class="kpi-value" id="kpiOccupancy">--/--</div>
+            <small class="text-success"><i class="bi bi-arrow-up"></i> 12% vs avg</small>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="kpi-card">
+            <div class="kpi-label">Attendance Rate</div>
+            <div class="kpi-value text-info" id="kpiAttendance">--%</div>
+            <div class="progress mt-2" style="height: 5px; background: #333;">
+                <div class="progress-bar bg-info" id="progAttendance" style="width: 0%"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="kpi-card">
+            <div class="kpi-label">Avg. Productivity</div>
+            <div class="kpi-value" style="color: var(--secondary-neon);" id="kpiProductivity">--</div>
+            <small class="text-muted">Based on active hours</small>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="kpi-card" style="border-left-color: var(--alert-color);">
+            <div class="kpi-label">Alerts Today</div>
+            <div class="kpi-value text-danger" id="kpiAlerts">--</div>
+            <small class="text-danger">3 Critical</small>
+        </div>
+    </div>
+</div>
+
+<!-- 3. Main Visualizations (Split View) -->
+<div class="row mb-4">
+    <!-- Productivity Trends (60%) -->
+    <div class="col-md-8">
+        <div class="cyber-card h-100">
+            <div class="cyber-card-body">
+                <h5 class="mb-3">Productivity Trends (Hourly)</h5>
+                <div class="chart-container-split" style="height: 350px;">
+                    <canvas id="trendChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Zone Heatmap (40%) -->
+    <div class="col-md-4">
+        <div class="cyber-card h-100">
+            <div class="cyber-card-body">
+                <h5 class="mb-3">Zone Heatmap & Traffic</h5>
+                <div class="heatmap-container" style="height: 350px; border-radius: 4px;">
+                    <div class="heatmap-overlay">
+                        <span>Floor Plan Overlay</span>
+                    </div>
+                    <!-- CSS Animated Heat Spots -->
+                    <div class="heat-spot" style="top: 30%; left: 40%;"></div>
+                    <div class="heat-spot" style="top: 60%; left: 70%; animation-delay: 1s;"></div>
+                    <div class="heat-spot" style="top: 40%; left: 20%; animation-delay: 2s; width: 60px; height: 60px;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 4. Detailed Metrics -->
+<div class="row mb-4">
+    <!-- Dept Comparison -->
+    <div class="col-md-6">
+        <div class="cyber-card">
+            <div class="cyber-card-body">
+                <h5 class="mb-3">Department Active Hours</h5>
+                <div style="height: 200px;">
+                    <canvas id="deptChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Active vs Idle -->
+    <div class="col-md-6">
+        <div class="cyber-card">
+            <div class="cyber-card-body">
+                <h5 class="mb-3">Work Time Breakdown</h5>
+                <div style="height: 200px; display: flex; justify-content: center;">
+                    <canvas id="splitChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 5. Real-Time Logs Footer -->
+<div class="row">
+    <div class="col-12">
+        <div class="cyber-card">
+            <div class="cyber-card-body p-0">
+                <div class="p-3 border-bottom border-secondary d-flex justify-content-between">
+                    <h6 class="m-0 text-uppercase"><i class="bi bi-activity"></i> Recent Activity Log</h6>
+                    <span class="badge bg-danger">Live Feed</span>
+                </div>
+                <div class="alerts-feed" id="alertsFeed">
+                    <!-- Populated via JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        fetch('/api/analytics_detailed')
+            .then(res => res.json())
+            .then(data => {
+                updateKPIs(data.kpi);
+                initDetailedCharts(data);
+                updateAlertsFeed(data.recent_alerts);
+            });
+    });
+
+    function updateKPIs(kpi) {
+        document.getElementById('kpiOccupancy').innerText = `${kpi.occupancy.current}/${kpi.occupancy.capacity}`;
+        document.getElementById('kpiAttendance').innerText = `${kpi.attendance}%`;
+        document.getElementById('progAttendance').style.width = `${kpi.attendance}%`;
+        document.getElementById('kpiProductivity').innerText = kpi.productivity;
+        document.getElementById('kpiAlerts').innerText = kpi.alerts_today;
+    }
+
+    function updateAlertsFeed(alerts) {
+        const feed = document.getElementById('alertsFeed');
+        feed.innerHTML = alerts.map(a => `
+            <div class="alert-item ${a.level}">
+                <span class="alert-time">[${a.time}]</span>
+                <span class="alert-event">${a.event}</span>
+                <span class="badge bg-dark border border-secondary">${a.level.toUpperCase()}</span>
+            </div>
+        `).join('');
+    }
+
+    function initDetailedCharts(data) {
+        Chart.defaults.color = '#888';
+        Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.1)';
+
+        // 1. Productivity Trend (Line)
+        new Chart(document.getElementById('trendChart'), {
+            type: 'line',
+            data: {
+                labels: data.productivity_trend.labels,
+                datasets: [{
+                    label: 'Activity Level',
+                    data: data.productivity_trend.values,
+                    borderColor: '#00f3ff', // Cyan
+                    backgroundColor: 'rgba(0, 243, 255, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true, max: 100 } }
+            }
+        });
+
+        // 2. Dept Comparison (Bar)
+        new Chart(document.getElementById('deptChart'), {
+            type: 'bar',
+            data: {
+                labels: data.dept_comparison.labels,
+                datasets: [{
+                    label: 'Avg Active Hours',
+                    data: data.dept_comparison.active_time_avg,
+                    backgroundColor: ['#ff00ff', '#00f3ff', '#3333ff', '#00ff99']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                indexAxis: 'y'
+            }
+        });
+
+        // 3. Work Breakdown (Doughnut)
+        new Chart(document.getElementById('splitChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Active', 'Idle', 'Break'],
+                datasets: [{
+                    data: data.work_split,
+                    backgroundColor: ['#00f3ff', '#555', '#222'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { position: 'right' } },
+                cutout: '70%'
+            }
+        });
+    }
+</script>
+{% endblock %}

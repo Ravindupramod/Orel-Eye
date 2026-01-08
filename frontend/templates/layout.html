@@ -1,0 +1,869 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>OREL EYE | {% block title %}System{% endblock %}</title>
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400&display=swap"
+        rel="stylesheet">
+    <!-- Custom Cyber CSS -->
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+
+        h1,
+        h2,
+        h3,
+        .navbar-brand,
+        .btn-cyber {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        /* Premium Day Mode: Porcelain Theme */
+        body.light-theme {
+            background: #F8F9FD !important;
+            /* Porcelain */
+            color: #1A1C20 !important;
+            /* Obsidian */
+        }
+
+        body.light-theme .cyber-container {
+            background: transparent !important;
+        }
+
+        /* Cards & Panels */
+        body.light-theme .cyber-card,
+        body.light-theme .kpi-card,
+        body.light-theme .chat-panel,
+        body.light-theme .analytics-controls,
+        body.light-theme .chart-container-split,
+        body.light-theme .modal-content,
+        body.light-theme .alerts-feed {
+            background: #FFFFFF !important;
+            border: 1px solid #E5E7EB !important;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03) !important;
+            /* Soft Shadow */
+            color: #1A1C20 !important;
+        }
+
+        body.light-theme .cyber-card-body {
+            color: #111827 !important;
+        }
+
+        body.light-theme .cyber-card h1,
+        body.light-theme .cyber-card h2,
+        body.light-theme .cyber-card h3,
+        body.light-theme .cyber-card h4,
+        body.light-theme .cyber-card h5,
+        body.light-theme .cyber-card h6 {
+            color: #111827 !important;
+        }
+
+        /* Navbar */
+        body.light-theme .navbar {
+            background: #FFFFFF !important;
+            border-bottom: 1px solid #E5E7EB !important;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05) !important;
+        }
+
+        body.light-theme .navbar-brand {
+            color: #C70039 !important;
+            /* Crimson Glory */
+        }
+
+        body.light-theme .navbar-brand span:first-child {
+            color: #1A1C20 !important;
+            /* Obsidian for 'OREL' */
+        }
+
+        /* Crimson Glory */
+        }
+
+        body.light-theme .nav-link {
+            color: #6B7280 !important;
+            /* Slate */
+        }
+
+        body.light-theme .nav-link:hover,
+        body.light-theme .nav-link.active {
+            color: #C70039 !important;
+        }
+
+        /* Typography */
+        body.light-theme h1,
+        body.light-theme h2,
+        body.light-theme h3,
+        body.light-theme h4,
+        body.light-theme h5,
+        body.light-theme h6,
+        body.light-theme .neon-heading {
+            color: #1A1C20 !important;
+            text-shadow: none !important;
+        }
+
+        body.light-theme .text-muted {
+            color: #6B7280 !important;
+            /* Slate */
+        }
+
+        /* Inputs & Tables */
+        body.light-theme .form-control,
+        body.light-theme .form-select,
+        body.light-theme select,
+        body.light-theme .cyber-select,
+        body.light-theme .input-group-text {
+            background: #FFFFFF !important;
+            color: #1A1C20 !important;
+            border: 1px solid #E5E7EB !important;
+        }
+
+        body.light-theme .table {
+            color: #1A1C20 !important;
+            background: #FFFFFF !important;
+        }
+
+        body.light-theme .table-dark {
+            background: #FFFFFF !important;
+            color: #1A1C20 !important;
+        }
+
+        body.light-theme .table th {
+            color: #6B7280 !important;
+        }
+
+        /* Buttons & Accents */
+        body.light-theme .btn-cyber {
+            background: #C70039 !important;
+            /* Crimson Glory */
+            color: #FFFFFF !important;
+            border: none !important;
+            box-shadow: 0 4px 6px -1px rgba(199, 0, 57, 0.3) !important;
+        }
+
+        body.light-theme .btn-cyber:hover {
+            background: #A60030 !important;
+            /* Darker Crimson */
+            transform: translateY(-1px);
+        }
+
+        body.light-theme .btn-outline-light {
+            color: #C70039 !important;
+            border-color: #C70039 !important;
+        }
+
+        body.light-theme .btn-outline-light:hover {
+            background: #C70039 !important;
+            color: #fff !important;
+        }
+
+        /* KPIs & Alerts */
+        body.light-theme .kpi-value {
+            color: #C70039 !important;
+        }
+
+        body.light-theme .kpi-card {
+            border-left: 4px solid #C70039 !important;
+        }
+
+        body.light-theme .alert-item {
+            border-bottom: 1px solid #E5E7EB !important;
+            background: #FFFFFF !important;
+        }
+
+        body.light-theme .alert-info {
+            background: rgba(199, 0, 57, 0.05) !important;
+            color: #C70039 !important;
+            border-color: rgba(199, 0, 57, 0.2) !important;
+        }
+
+        /* Chat */
+        body.light-theme .chat-header {
+            background: #FFFFFF !important;
+            border-bottom: 1px solid #E5E7EB !important;
+        }
+
+        body.light-theme .chat-header h5 {
+            color: #C70039 !important;
+        }
+
+        body.light-theme .chat-message {
+            background: #F3F4F6 !important;
+            color: #1A1C20 !important;
+        }
+
+        /* Smooth transitions */
+        body,
+        .cyber-card,
+        .form-control,
+        .btn,
+        .table,
+        .navbar,
+        .chat-panel,
+        .analytics-controls {
+            transition: all 0.3s ease;
+        }
+    </style>
+    <script>
+        // Global Theme Initialization - Applies to ALL pages
+        (function () {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            if (savedTheme === 'light') {
+                document.body.classList.add('light-theme');
+            }
+        })();
+    </script>
+</head>
+
+<body>
+
+    <!-- Red Alert Overlay -->
+    <div id="alertOverlay">
+        <div class="alert-message">SECURITY BREACH</div>
+    </div>
+
+    <!-- Voice Command Button -->
+    {% if current_user.is_authenticated %}
+    <!-- Voice now integrated in chat panel -->
+
+    <!-- Transcription Display -->
+    <div id="transcriptionDisplay" style="display: none;">
+        <div class="transcription-content">
+            <div class="listening-indicator">
+                <i class="bi bi-mic-fill"></i> Listening...
+            </div>
+            <div id="transcriptionText" class="transcription-text"></div>
+        </div>
+    </div>
+
+    <!-- Chat Button -->
+    <div id="chatButton" onclick="toggleChat()" title="Chat with Agent">
+        <i class="bi bi-chat-dots-fill"></i>
+    </div>
+
+    <!-- Chat Panel -->
+    <div id="chatPanel" class="chat-panel">
+        <div class="chat-header">
+            <div class="header-content">
+                <h5><i class="bi bi-robot"></i> OREL EYE Agent</h5>
+                <div class="status-indicator" id="chatStatus">
+                    <span class="status-dot online"></span>
+                    <span class="status-text">Online</span>
+                </div>
+            </div>
+            <div class="header-buttons">
+                <button onclick="startVoiceInChat()" class="voice-btn" title="Voice Input">
+                    <i class="bi bi-mic-fill"></i>
+                </button>
+                <button onclick="clearConversation()" class="clear-btn" title="Clear Chat">
+                    <i class="bi bi-trash"></i>
+                </button>
+                <button onclick="toggleChat()" class="close-chat">&times;</button>
+            </div>
+        </div>
+
+        <!-- System Status Bar -->
+        <div class="chat-system-status" id="systemStatusBar">
+            <div class="status-item">
+                <i class="bi bi-camera-video"></i>
+                <span id="cameraStatus">18/18</span>
+            </div>
+            <div class="status-item">
+                <i class="bi bi-clock"></i>
+                <span id="timeStatus">--:--</span>
+            </div>
+        </div>
+
+
+        <div id="chatMessages" class="chat-messages">
+            <!-- Welcome message -->
+            <div class="chat-message agent-message welcome-message">
+                <strong>👋 Hey there! I'm OREL!</strong><br><br>
+                Your friendly AI surveillance assistant here to help! 🤖✨<br><br>
+                I can help you:<br>
+                🎥 Monitor cameras<br>
+                🔍 Track employees<br>
+                📊 View analytics<br>
+                🗺️ Check facility map<br><br>
+                Just ask me naturally - I'm all ears! 💬
+            </div>
+        </div>
+
+        <!-- Quick Suggestions -->
+        <div id="chatSuggestions" class="chat-suggestions"></div>
+
+        <div class="chat-input-container">
+            <input type="text" id="chatInput" placeholder="Type or speak..." onkeypress="handleChatKeyPress(event)">
+            <button onclick="sendChatMessage()" class="btn-send">
+                <i class="bi bi-send-fill"></i>
+            </button>
+        </div>
+    </div>
+    {% endif %}
+
+    <nav class="navbar navbar-expand-lg navbar-dark mb-4">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('dashboard') }}">
+                <span style="color: white;">OREL</span> <span style="color: var(--primary-neon);">EYE</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    {% if current_user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('monitor') }}">Monitor</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('track_page') }}">Tracking</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('map_page') }}">Map</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('analytics') }}">Analytics</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('database') }}">Database</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('reports') }}">Reports</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('settings') }}">Settings</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="toggleGlobalTheme(event)" title="Toggle Theme">
+                            <i class="bi bi-moon-stars-fill" id="themeIcon"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-danger" href="{{ url_for('logout') }}"
+                            style="color: var(--secondary-neon) !important;">Logout</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid cyber-container">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        // Global Theme Toggle Logic
+        function toggleGlobalTheme(event) {
+            if (event) event.preventDefault();
+
+            const isLight = document.body.classList.toggle('light-theme');
+            const theme = isLight ? 'light' : 'dark';
+            localStorage.setItem('theme', theme);
+
+            updateThemeIcon(theme);
+
+            // Sync with Settings page toggle if present
+            const settingsToggle = document.getElementById('darkMode');
+            if (settingsToggle) {
+                settingsToggle.checked = !isLight;
+            }
+        }
+
+        function updateThemeIcon(theme) {
+            const icon = document.getElementById('themeIcon');
+            if (icon) {
+                if (theme === 'light') {
+                    icon.className = 'bi bi-sun-fill';
+                    icon.style.color = '#ffd700'; // Gold sun
+                } else {
+                    icon.className = 'bi bi-moon-stars-fill';
+                    icon.style.color = ''; // Inherit
+                }
+            }
+        }
+
+        // Initialize Theme on Load
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            if (savedTheme === 'light') {
+                document.body.classList.add('light-theme');
+            }
+            updateThemeIcon(savedTheme);
+        });
+
+        // Voice Command Logic - Integrated with Chat
+        function toggleVoice() {
+            const chatPanel = document.getElementById('chatPanel');
+            if (!chatPanel.classList.contains('open')) {
+                toggleChat(); // Open chat first
+            }
+            startVoiceInChat();
+        }
+
+        function startVoiceInChat() {
+            if (!('webkitSpeechRecognition' in window)) {
+                addChatMessage('Voice not supported. Use Chrome browser.', 'agent');
+                return;
+            }
+
+            const recognition = new webkitSpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = true;  // Enable interim results for real-time transcription
+            recognition.lang = 'en-US';
+
+            recognition.onstart = function () {
+                addChatMessage('🎤 Listening...', 'system', true);
+            };
+
+            recognition.onend = function () {
+                // Remove listening indicator
+                const systemMsgs = document.querySelectorAll('.system-message');
+                systemMsgs.forEach(msg => msg.remove());
+            };
+
+            recognition.onresult = function (event) {
+                // Show interim results
+                let transcript = '';
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    transcript = event.results[i][0].transcript;
+
+                    if (event.results[i].isFinal) {
+                        // Remove any interim messages
+                        const systemMsgs = document.querySelectorAll('.system-message');
+                        systemMsgs.forEach(msg => msg.remove());
+
+                        // Add user's spoken message
+                        addChatMessage(transcript, 'user');
+
+                        // Send to agent
+                        sendToAgentAndDisplay(transcript);
+                    }
+                }
+            };
+
+            recognition.start();
+        }
+
+        // Unified function to send message and display in chat
+        function sendToAgentAndDisplay(message) {
+            // Clear suggestions
+            document.getElementById('chatSuggestions').innerHTML = '';
+
+            // Show typing indicator
+            const typingId = addTypingIndicator();
+
+            fetch('/api/call_agent', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message: message })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Remove typing indicator
+                    const typingMsg = document.getElementById(typingId);
+                    if (typingMsg) typingMsg.remove();
+
+                    if (data.success) {
+                        // Add agent response to chat
+                        addChatMessage(data.response, 'agent');
+
+                        // Update system status
+                        if (data.system_status) {
+                            updateSystemStatus(data.system_status);
+                        }
+
+                        // Display suggestions
+                        if (data.suggestions && data.suggestions.length > 0) {
+                            displaySuggestions(data.suggestions);
+                        }
+
+                        // Execute actions if any
+                        if (data.actions && data.actions.length > 0) {
+                            executeActions(data.actions);
+                        }
+                    } else {
+                        addChatMessage('Error: ' + (data.error || 'Unknown error'), 'agent');
+                    }
+                })
+                .catch(error => {
+                    const typingMsg = document.getElementById(typingId);
+                    if (typingMsg) typingMsg.remove();
+                    addChatMessage('Connection error. Server may not be running.', 'agent');
+                    console.error('Agent error:', error);
+                });
+        }
+
+
+        function sendToAgent(message) {
+            // Show loading indicator
+            const btn = document.getElementById('micButton');
+            btn.classList.add('processing');
+
+            fetch('/api/call_agent', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message: message })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    btn.classList.remove('processing');
+
+                    if (data.success) {
+                        // Execute actions first if any
+                        if (data.actions && data.actions.length > 0) {
+                            executeActions(data.actions);
+                        }
+                        // Display AI response
+                        displayAgentResponse(message, data.response);
+                    } else {
+                        alert('Error: ' + (data.error || 'Unknown error'));
+                    }
+                })
+                .catch(error => {
+                    btn.classList.remove('processing');
+                    alert('Failed to contact agent: ' + error);
+                });
+        }
+
+        function executeActions(actions) {
+            actions.forEach(action => {
+                console.log('Executing action:', action);
+
+                switch (action.type) {
+                    case 'navigate':
+                        setTimeout(() => {
+                            window.location.href = action.target;
+                        }, 1500);
+                        break;
+
+                    case 'search_employee':
+                        setTimeout(() => {
+                            if (window.location.pathname !== '/track') {
+                                sessionStorage.setItem('pendingSearch', action.name);
+                                window.location.href = '/track';
+                            } else {
+                                const input = document.getElementById('searchInput');
+                                if (input) {
+                                    input.value = action.name;
+                                    if (typeof startSearch === 'function') startSearch();
+                                }
+                            }
+                        }, 1500);
+                        break;
+
+                    case 'trigger_alert':
+                        setTimeout(() => {
+                            triggerAlert();
+                        }, 1500);
+                        break;
+                }
+            });
+        }
+
+        function displayAgentResponse(userMessage, agentResponse) {
+            // Create a modal-like overlay to show the conversation
+            const overlay = document.createElement('div');
+            overlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.8);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 9999;
+            `;
+
+            const dialog = document.createElement('div');
+            dialog.style.cssText = `
+                background: linear-gradient(135deg, #1a1a2e 0%, #0f0f1e 100%);
+                border: 2px solid var(--primary-neon);
+                border-radius: 10px;
+                padding: 30px;
+                max-width: 600px;
+                width: 90%;
+                box-shadow: 0 0 30px rgba(0, 243, 255, 0.3);
+            `;
+
+            dialog.innerHTML = `
+                <h3 style="color: var(--primary-neon); margin-top: 0; font-family: 'Orbitron', sans-serif;">
+                    <i class="bi bi-robot"></i> OREL EYE Agent
+                </h3>
+                <div style="margin: 20px 0;">
+                    <div style="background: rgba(0, 243, 255, 0.1); padding: 15px; border-radius: 5px; margin-bottom: 15px;">
+                        <strong style="color: #00f3ff;">You:</strong>
+                        <p style="margin: 5px 0 0 0; color: #ccc;">${userMessage}</p>
+                    </div>
+                    <div style="background: rgba(255, 0, 255, 0.1); padding: 15px; border-radius: 5px;">
+                        <strong style="color: #ff00ff;">Agent:</strong>
+                        <p style="margin: 5px 0 0 0; color: #ccc;">${agentResponse}</p>
+                    </div>
+                </div>
+                <button onclick="this.closest('[style*=fixed]').remove()" 
+                    class="btn btn-cyber" style="width: 100%;">
+                    Close
+                </button>
+            `;
+
+            overlay.appendChild(dialog);
+            document.body.appendChild(overlay);
+
+            // Auto-close after 10 seconds
+            setTimeout(() => overlay.remove(), 10000);
+        }
+
+        function processCommand(cmd) {
+            // Legacy fallback - kept for backward compatibility
+            // Simple Command Parser
+            if (cmd.includes('dashboard') || cmd.includes('home')) {
+                window.location.href = "{{ url_for('dashboard') }}";
+            } else if (cmd.includes('monitor') || cmd.includes('cameras')) {
+                window.location.href = "{{ url_for('monitor') }}";
+            } else if (cmd.includes('track') || cmd.includes('search')) {
+                window.location.href = "{{ url_for('track_page') }}";
+            } else if (cmd.includes('map') || cmd.includes('floor')) {
+                window.location.href = "{{ url_for('map_page') }}";
+            } else if (cmd.includes('analytics') || cmd.includes('data')) {
+                window.location.href = "{{ url_for('analytics') }}";
+            } else if (cmd.includes('security') || cmd.includes('breach') || cmd.includes('alert')) {
+                triggerAlert();
+            } else {
+                alert("Unknown command: " + cmd);
+            }
+        }
+
+
+
+        // Chat Functions
+        function toggleChat() {
+            const chatPanel = document.getElementById('chatPanel');
+            chatPanel.classList.toggle('open');
+
+            if (chatPanel.classList.contains('open')) {
+                document.getElementById('chatInput').focus();
+            }
+        }
+
+        function handleChatKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendChatMessage();
+            }
+        }
+
+        function sendChatMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+
+            if (!message) return;
+
+            // Add user message to chat
+            addChatMessage(message, 'user');
+            input.value = '';
+
+            // Clear suggestions
+            document.getElementById('chatSuggestions').innerHTML = '';
+
+            // Show typing indicator with animation
+            const typingId = addTypingIndicator();
+
+            // Send to API
+            fetch('/api/call_agent', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message: message })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Remove typing indicator
+                    const typingMsg = document.getElementById(typingId);
+                    if (typingMsg) typingMsg.remove();
+
+                    if (data.success) {
+                        // Add agent response
+                        addChatMessage(data.response, 'agent');
+
+                        // Update system status if provided
+                        if (data.system_status) {
+                            updateSystemStatus(data.system_status);
+                        }
+
+                        // Display suggestions
+                        if (data.suggestions && data.suggestions.length > 0) {
+                            displaySuggestions(data.suggestions);
+                        }
+
+                        // Execute actions if any
+                        if (data.actions && data.actions.length > 0) {
+                            executeActions(data.actions);
+                        }
+                    } else {
+                        addChatMessage('Error: ' + (data.error || 'Unknown error'), 'agent');
+                    }
+                })
+                .catch(error => {
+                    const typingMsg = document.getElementById(typingId);
+                    if (typingMsg) typingMsg.remove();
+                    addChatMessage('Connection error. Please check if the server is running.', 'agent');
+                    console.error('Agent error:', error);
+                });
+        }
+
+        function addChatMessage(message, sender, isTyping = false) {
+            const messagesContainer = document.getElementById('chatMessages');
+            const messageId = 'msg-' + Date.now();
+
+            const messageDiv = document.createElement('div');
+            messageDiv.id = messageId;
+            messageDiv.className = `chat-message ${sender}-message${isTyping ? ' typing' : ''}`;
+            messageDiv.textContent = message;
+
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+            return messageId;
+        }
+
+        function addTypingIndicator() {
+            const messagesContainer = document.getElementById('chatMessages');
+            const messageId = 'msg-' + Date.now();
+
+            const messageDiv = document.createElement('div');
+            messageDiv.id = messageId;
+            messageDiv.className = 'chat-message agent-message typing-message';
+            messageDiv.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
+
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+            return messageId;
+        }
+
+        function displaySuggestions(suggestions) {
+            const container = document.getElementById('chatSuggestions');
+            container.innerHTML = '';
+
+            suggestions.forEach(suggestion => {
+                const btn = document.createElement('button');
+                btn.className = 'suggestion-btn';
+                btn.textContent = suggestion.text;
+                btn.onclick = () => {
+                    if (suggestion.action.startsWith('/')) {
+                        window.location.href = suggestion.action;
+                    } else {
+                        document.getElementById('chatInput').value = suggestion.text.replace(/[📊🎥🔍🗺️🏠⚠️]/g, '').trim();
+                        sendChatMessage();
+                    }
+                };
+                container.appendChild(btn);
+            });
+        }
+
+        function updateSystemStatus(status) {
+            const cameraStatus = document.getElementById('cameraStatus');
+            const timeStatus = document.getElementById('timeStatus');
+
+            if (cameraStatus && status.cameras_online !== undefined) {
+                cameraStatus.textContent = `${status.cameras_online}/${status.cameras_total}`;
+
+                // Update status indicator color
+                const statusDot = document.querySelector('.status-dot');
+                if (status.cameras_online === status.cameras_total) {
+                    statusDot.className = 'status-dot online';
+                } else if (status.cameras_online >= status.cameras_total * 0.8) {
+                    statusDot.className = 'status-dot warning';
+                } else {
+                    statusDot.className = 'status-dot offline';
+                }
+            }
+
+            if (timeStatus) {
+                const now = new Date();
+                timeStatus.textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+            }
+        }
+
+        function clearConversation() {
+            if (!confirm('Clear conversation history?')) return;
+
+            fetch('/api/clear_conversation', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('chatMessages').innerHTML = `
+                            <div class="chat-message agent-message welcome-message">
+                                <strong>🔄 Fresh Start!</strong><br><br>
+                                Conversation cleared! Ready to help with anything new! 😊✨<br><br>
+                                What would you like to explore?
+                            </div>
+                        `;
+                        document.getElementById('chatSuggestions').innerHTML = '';
+                    }
+                })
+                .catch(error => console.error('Clear error:', error));
+        }
+
+        // Update time every minute
+        setInterval(() => {
+            const timeStatus = document.getElementById('timeStatus');
+            if (timeStatus) {
+                const now = new Date();
+                timeStatus.textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+            }
+        }, 60000);
+
+        // Initialize time on load
+        window.addEventListener('DOMContentLoaded', () => {
+            // Status and theme already initialized
+            updateSystemStatus({});
+        });
+
+
+        function triggerAlert() {
+            const overlay = document.getElementById('alertOverlay');
+            overlay.style.display = 'flex';
+
+            // Audio Alarm (simulated beep)
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioCtx.createOscillator();
+            oscillator.type = 'square';
+            oscillator.frequency.setValueAtTime(440, audioCtx.currentTime); // value in hertz
+            oscillator.connect(audioCtx.destination);
+            oscillator.start();
+
+            // Stop after 3 seconds
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                oscillator.stop();
+            }, 3000);
+        }
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+
+</html>

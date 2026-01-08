@@ -1,0 +1,130 @@
+{% extends "layout.html" %}
+
+{% block title %}Target Tracking{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <!-- Search Panel -->
+    <div class="col-md-4">
+        <div class="cyber-card mb-4">
+            <div class="cyber-card-body">
+                <h4 class="mb-3">Target Parameters</h4>
+                <div class="mb-3">
+                    <label class="form-label" style="color: var(--text-dim);">Employee Name</label>
+                    <input type="text" id="searchInput" class="form-control form-control-cyber"
+                        placeholder="e.g. Mindii Chenaya">
+                </div>
+                <button onclick="startSearch()" class="btn btn-cyber w-100">
+                    <span id="btnText">Execute Scan</span>
+                    <span id="btnSpinner" class="spinner-border spinner-border-sm d-none"></span>
+                </button>
+
+                <hr style="border-color: var(--border-color);">
+
+                <div id="statusLog" class="font-monospace"
+                    style="font-size: 0.8rem; color: var(--secondary-neon); height: 150px; overflow-y: auto;">
+                    <div>> System Ready...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Result Panel -->
+    <div class="col-md-8">
+        <div class="cyber-card h-100">
+            <div class="cyber-card-body h-100 d-flex flex-column justify-content-center align-items-center"
+                id="resultArea">
+                <h2 class="text-muted opacity-25">NO TARGET SELECTED</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function log(msg) {
+        const timestamp = new Date().toLocaleTimeString();
+        $('#statusLog').append(`<div>> [${timestamp}] ${msg}</div>`);
+        $('#statusLog').scrollTop($('#statusLog')[0].scrollHeight);
+    }
+
+    function startSearch() {
+        const name = $('#searchInput').val();
+        if (!name) {
+            log("Error: Name parameter missing.");
+            return;
+        }
+
+        log(`Initiating scan for subject: ${name}...`);
+        $('#btnText').text('Scanning...');
+        $('#btnSpinner').removeClass('d-none');
+
+        // Mock delay for realism
+        setTimeout(() => {
+            $.get("{{ url_for('track_employee_api') }}", { name: name })
+                .done(function (data) {
+                    $('#btnText').text('Execute Scan');
+                    $('#btnSpinner').addClass('d-none');
+
+                    if (data.found) {
+                        log(`MATCH CONFIRMED: ${data.name}`);
+                        log(`Location: ${data.camera_name}`);
+                        showResult(data);
+                    } else {
+                        log(`SCAN RESULT: Negative.`);
+                        log(`Info: ${data.message || 'Subject not found'}`);
+                        showEmpty();
+                    }
+                })
+                .fail(function () {
+                    $('#btnText').text('Execute Scan');
+                    $('#btnSpinner').addClass('d-none');
+                    log("CRITICAL FAILURE: Network Error");
+                });
+        }, 1500);
+    }
+
+    function showResult(data) {
+        const html = `
+            <div class="text-center w-100 fade-in">
+                <h2 class="text-success mb-2" style="color: var(--primary-neon) !important;">TARGET LOCATED</h2>
+                <h4 class="mb-4">${data.name}</h4>
+                
+                <div class="row justify-content-center mb-4">
+                    <div class="col-md-10">
+                        <div class="border border-success p-1" style="border-color: var(--primary-neon) !important;">
+                            <img src="/video_feed/${data.camera_id}" class="img-fluid w-100" style="border: 2px solid var(--primary-neon);">
+                        </div>
+                        <div class="mt-2 text-start d-flex justify-content-between">
+                            <span><i class="bi bi-geo-alt"></i> ${data.camera_name}</span>
+                            <span>STATUS: <span class="badge bg-success">${data.status}</span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        $('#resultArea').html(html);
+    }
+
+    function showEmpty() {
+        $('#resultArea').html('<h2 class="text-danger opacity-75">SUBJECT NOT DETECTED</h2>');
+    }
+</script>
+<style>
+    .fade-in {
+        animation: fadeIn 0.5s ease-in;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+</style>
+{% endblock %}

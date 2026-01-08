@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+
+{% block title %}Monitor Grid{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="m-0">Live Feeds</h3>
+    <div>
+        <button class="btn btn-sm btn-cyber me-2 active" onclick="filterCams('all', this)">All Feeds</button>
+        <button class="btn btn-sm btn-cyber me-2" onclick="filterCams('working', this)">Working Areas</button>
+        <button class="btn btn-sm btn-cyber" onclick="filterCams('non-working', this)">Restricted Areas</button>
+    </div>
+</div>
+
+<div class="row" id="camGrid">
+    {% for cam in cameras %}
+    <div class="col-xl-3 col-lg-4 col-md-6 mb-4 cam-col" data-category="{{ cam.category }}">
+        <div class="cyber-card">
+            <div class="p-2 d-flex justify-content-between align-items-center"
+                style="background: rgba(0,0,0,0.5); border-bottom: 1px solid #333;">
+                <span class="fw-bold" style="color: var(--primary-neon);">{{ cam.name }}</span>
+                <span style="font-size: 0.8rem; color: #ff3333;">● LIVE</span>
+            </div>
+            <div class="ratio ratio-16x9">
+                <img src="{{ url_for('video_feed', camera_id=cam.id) }}" class="w-100 h-100 object-fit-cover">
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function filterCams(type, btn) {
+        $('.btn-cyber').removeClass('active').css('background', 'transparent').css('color', 'var(--primary-neon)');
+        $(btn).addClass('active').css('background', 'var(--primary-neon)').css('color', 'black');
+
+        const cols = document.querySelectorAll('.cam-col');
+        cols.forEach(col => {
+            if (type === 'all' || col.getAttribute('data-category') === type) {
+                col.style.display = 'block';
+            } else {
+                col.style.display = 'none';
+            }
+        });
+    }
+</script>
+{% endblock %}

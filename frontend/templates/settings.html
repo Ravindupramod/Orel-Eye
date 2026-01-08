@@ -1,0 +1,642 @@
+{% extends "layout.html" %}
+
+{% block title %}Settings{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h2 class="neon-heading">⚙️ System Configuration</h2>
+        <p class="text-muted">Configure surveillance settings, schedules, and preferences</p>
+    </div>
+</div>
+
+<!-- Tab Navigation -->
+<div class="row mb-4">
+    <div class="col-12">
+        <ul class="nav nav-tabs nav-fill" role="tablist" style="border-bottom: 2px solid var(--primary-neon);">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="cameras-tab" data-bs-toggle="tab" data-bs-target="#cameras"
+                    type="button" role="tab">
+                    <i class="bi bi-camera-video"></i> Cameras
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="alerts-tab" data-bs-toggle="tab" data-bs-target="#alerts" type="button"
+                    role="tab">
+                    <i class="bi bi-bell"></i> Alerts
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="schedule-tab" data-bs-toggle="tab" data-bs-target="#schedule" type="button"
+                    role="tab">
+                    <i class="bi bi-clock"></i> Shifts
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="ai-tab" data-bs-toggle="tab" data-bs-target="#ai" type="button" role="tab">
+                    <i class="bi bi-robot"></i> AI Engine
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="system-tab" data-bs-toggle="tab" data-bs-target="#system" type="button"
+                    role="tab">
+                    <i class="bi bi-gear"></i> System
+                </button>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!-- Tab Content -->
+<div class="row">
+    <div class="col-12">
+        <div class="tab-content">
+            <!-- Cameras Tab -->
+            <div class="tab-pane fade show active" id="cameras" role="tabpanel">
+                <div class="cyber-card mb-4">
+                    <div class="cyber-card-body">
+                        <h5 class="mb-4">Camera Management</h5>
+                        <div class="table-responsive">
+                            <table class="table table-dark table-hover">
+                                <thead>
+                                    <tr style="border-bottom: 1px solid var(--primary-neon);">
+                                        <th>Camera ID</th>
+                                        <th>Location</th>
+                                        <th>Status</th>
+                                        <th>Resolution</th>
+                                        <th>FPS</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>CAM-001</td>
+                                        <td>Working Area 1</td>
+                                        <td><span class="badge bg-success">Online</span></td>
+                                        <td>1920x1080</td>
+                                        <td>30</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-light"><i
+                                                    class="bi bi-pencil"></i></button>
+                                            <button class="btn btn-sm btn-outline-light"><i
+                                                    class="bi bi-power"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>CAM-002</td>
+                                        <td>Working Area 2</td>
+                                        <td><span class="badge bg-success">Online</span></td>
+                                        <td>1920x1080</td>
+                                        <td>30</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-light"><i
+                                                    class="bi bi-pencil"></i></button>
+                                            <button class="btn btn-sm btn-outline-light"><i
+                                                    class="bi bi-power"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>CAM-NW1</td>
+                                        <td>Non-Working Area 1</td>
+                                        <td><span class="badge bg-warning">Maintenance</span></td>
+                                        <td>1920x1080</td>
+                                        <td>20</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-light"><i
+                                                    class="bi bi-pencil"></i></button>
+                                            <button class="btn btn-sm btn-outline-light"><i
+                                                    class="bi bi-power"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <button class="btn btn-cyber mt-3"><i class="bi bi-plus-circle"></i> Add New Camera</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alerts Tab -->
+            <div class="tab-pane fade" id="alerts" role="tabpanel">
+                <div class="cyber-card mb-4">
+                    <div class="cyber-card-body">
+                        <h5 class="mb-4">Alert Configuration</h5>
+
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="p-3 border border-secondary rounded">
+                                    <h6 class="mb-3">Motion Detection</h6>
+                                    <div class="form-check form-switch mb-3">
+                                        <input class="form-check-input" type="checkbox" id="motionDetection" checked>
+                                        <label class="form-check-label" for="motionDetection">Enable Motion
+                                            Detection</label>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted">Sensitivity</label>
+                                        <input type="range" class="form-range" min="0" max="100" value="75">
+                                        <small class="text-muted">Current: High (75%)</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="p-3 border border-secondary rounded">
+                                    <h6 class="mb-3">Intrusion Detection</h6>
+                                    <div class="form-check form-switch mb-3">
+                                        <input class="form-check-input" type="checkbox" id="intrusionDetection" checked>
+                                        <label class="form-check-label" for="intrusionDetection">Enable Intrusion
+                                            Alerts</label>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted">Alert Delay (seconds)</label>
+                                        <input type="number" class="form-control bg-dark text-light border-secondary"
+                                            value="5">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="p-3 border border-secondary rounded">
+                                    <h6 class="mb-3">Unknown Face Detection</h6>
+                                    <div class="form-check form-switch mb-3">
+                                        <input class="form-check-input" type="checkbox" id="unknownFace" checked>
+                                        <label class="form-check-label" for="unknownFace">Alert on Unknown Faces</label>
+                                    </div>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="autoCapture">
+                                        <label class="form-check-label" for="autoCapture">Auto-capture Unknown
+                                            Faces</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="p-3 border border-secondary rounded">
+                                    <h6 class="mb-3">Notification Channels</h6>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="emailNotif" checked>
+                                        <label class="form-check-label" for="emailNotif">Email Notifications</label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="smsNotif">
+                                        <label class="form-check-label" for="smsNotif">SMS Alerts</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="pushNotif" checked>
+                                        <label class="form-check-label" for="pushNotif">Push Notifications</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-cyber mt-4">Save Alert Settings</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Shifts Tab -->
+            <div class="tab-pane fade" id="schedule" role="tabpanel">
+                <div class="cyber-card mb-4">
+                    <div class="cyber-card-body">
+                        <h5 class="mb-4">Work Shift Configuration</h5>
+
+                        <div class="row mb-4">
+                            <div class="col-md-4">
+                                <div class="p-4 border border-success rounded text-center">
+                                    <h6 style="color: var(--primary-neon);">Morning Shift</h6>
+                                    <div class="display-6 my-3">🌅</div>
+                                    <div class="mb-2">
+                                        <input type="time" class="form-control bg-dark text-light border-secondary"
+                                            value="08:00">
+                                    </div>
+                                    <div class="mb-3">
+                                        <input type="time" class="form-control bg-dark text-light border-secondary"
+                                            value="16:00">
+                                    </div>
+                                    <small class="text-muted">8 AM - 4 PM</small>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="p-4 border border-warning rounded text-center">
+                                    <h6 style="color: var(--secondary-neon);">Evening Shift</h6>
+                                    <div class="display-6 my-3">🌆</div>
+                                    <div class="mb-2">
+                                        <input type="time" class="form-control bg-dark text-light border-secondary"
+                                            value="16:00">
+                                    </div>
+                                    <div class="mb-3">
+                                        <input type="time" class="form-control bg-dark text-light border-secondary"
+                                            value="00:00">
+                                    </div>
+                                    <small class="text-muted">4 PM - 12 AM</small>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="p-4 border border-info rounded text-center">
+                                    <h6 class="text-info">Night Shift</h6>
+                                    <div class="display-6 my-3">🌙</div>
+                                    <div class="mb-2">
+                                        <input type="time" class="form-control bg-dark text-light border-secondary"
+                                            value="00:00">
+                                    </div>
+                                    <div class="mb-3">
+                                        <input type="time" class="form-control bg-dark text-light border-secondary"
+                                            value="08:00">
+                                    </div>
+                                    <small class="text-muted">12 AM - 8 AM</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-3 border border-secondary rounded">
+                            <h6 class="mb-3">Break Times</h6>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label text-muted">Lunch Break Start</label>
+                                    <input type="time" class="form-control bg-dark text-light border-secondary"
+                                        value="12:00">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label text-muted">Lunch Break Duration (minutes)</label>
+                                    <input type="number" class="form-control bg-dark text-light border-secondary"
+                                        value="60">
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-cyber mt-4">Update Shift Schedule</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Engine Tab -->
+            <div class="tab-pane fade" id="ai" role="tabpanel">
+                <div class="cyber-card mb-4">
+                    <div class="cyber-card-body">
+                        <h5 class="mb-4">AI & Recognition Settings</h5>
+
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="p-3 border border-secondary rounded">
+                                    <h6 class="mb-3">Face Recognition</h6>
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted">Confidence Threshold</label>
+                                        <input type="range" class="form-range" min="0" max="100" value="85">
+                                        <small class="text-muted">Current: 85%</small>
+                                    </div>
+                                    <div class="form-check form-switch mb-2">
+                                        <input class="form-check-input" type="checkbox" id="realtimeRecognition"
+                                            checked>
+                                        <label class="form-check-label" for="realtimeRecognition">Real-time
+                                            Recognition</label>
+                                    </div>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="multiAngleDetection"
+                                            checked>
+                                        <label class="form-check-label" for="multiAngleDetection">Multi-angle
+                                            Detection</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="p-3 border border-secondary rounded">
+                                    <h6 class="mb-3">Object Detection</h6>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="personDetection" checked>
+                                        <label class="form-check-label" for="personDetection">Person Detection</label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="vehicleDetection">
+                                        <label class="form-check-label" for="vehicleDetection">Vehicle Detection</label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="objectTracking" checked>
+                                        <label class="form-check-label" for="objectTracking">Object Tracking</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-3 border border-secondary rounded mb-3">
+                            <h6 class="mb-3">AI Model Configuration</h6>
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label text-muted">Detection Model</label>
+                                    <select class="form-control bg-dark text-light border-secondary">
+                                        <option>YOLO v8</option>
+                                        <option>YOLO v7</option>
+                                        <option>SSD MobileNet</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label text-muted">Recognition Model</label>
+                                    <select class="form-control bg-dark text-light border-secondary">
+                                        <option>FaceNet</option>
+                                        <option>ArcFace</option>
+                                        <option>DeepFace</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label text-muted">Processing Mode</label>
+                                    <select class="form-control bg-dark text-light border-secondary">
+                                        <option>GPU Accelerated</option>
+                                        <option>CPU Only</option>
+                                        <option>Balanced</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-info">
+                            <i class="bi bi-info-circle"></i> AI Engine Status: <strong>Active</strong> | Last Model
+                            Update: 2 days ago | Accuracy: 97.3%
+                        </div>
+
+                        <button class="btn btn-cyber mt-2">Save AI Settings</button>
+                        <button class="btn btn-outline-light mt-2 ms-2">Retrain Model</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Tab -->
+            <div class="tab-pane fade" id="system" role="tabpanel">
+                <div class="cyber-card mb-4">
+                    <div class="cyber-card-body">
+                        <h5 class="mb-4">System Preferences</h5>
+
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="p-3 border border-secondary rounded">
+                                    <h6 class="mb-3">Storage Management</h6>
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted">Video Retention Period (days)</label>
+                                        <input type="number" class="form-control bg-dark text-light border-secondary"
+                                            value="30">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted">Auto-delete Old Recordings</label>
+                                        <select class="form-control bg-dark text-light border-secondary">
+                                            <option>After 30 days</option>
+                                            <option>After 60 days</option>
+                                            <option>After 90 days</option>
+                                            <option>Never</option>
+                                        </select>
+                                    </div>
+                                    <div class="progress mb-2" style="height: 20px;">
+                                        <div class="progress-bar bg-info" style="width: 75%">75% Used</div>
+                                    </div>
+                                    <small class="text-muted">750 GB / 1 TB</small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="p-3 border border-secondary rounded">
+                                    <h6 class="mb-3">System Maintenance</h6>
+                                    <div class="d-grid gap-2">
+                                        <button class="btn btn-outline-light">
+                                            <i class="bi bi-database"></i> Backup Database
+                                        </button>
+                                        <button class="btn btn-outline-light">
+                                            <i class="bi bi-arrow-clockwise"></i> Clear Cache
+                                        </button>
+                                        <button class="btn btn-outline-warning">
+                                            <i class="bi bi-arrow-repeat"></i> Restart Services
+                                        </button>
+                                        <button class="btn btn-outline-danger">
+                                            <i class="bi bi-exclamation-triangle"></i> System Reset
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-3 border border-secondary rounded">
+                            <h6 class="mb-3">User Preferences</h6>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label text-muted">Language</label>
+                                    <select class="form-control bg-dark text-light border-secondary">
+                                        <option>English</option>
+                                        <option>Spanish</option>
+                                        <option>French</option>
+                                        <option>German</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label text-muted">Time Zone</label>
+                                    <select class="form-control bg-dark text-light border-secondary">
+                                        <option>UTC +5:30 (IST)</option>
+                                        <option>UTC +0:00 (GMT)</option>
+                                        <option>UTC -5:00 (EST)</option>
+                                        <option>UTC -8:00 (PST)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="darkMode" checked>
+                                <label class="form-check-label" for="darkMode">Dark Mode (Cyber Theme)</label>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-cyber mt-4">Save System Settings</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .nav-tabs .nav-link {
+        background: transparent;
+        border: none;
+        color: #888;
+        padding: 1rem 1.5rem;
+        transition: all 0.3s ease;
+    }
+
+    .nav-tabs .nav-link:hover {
+        color: var(--primary-neon);
+        border-bottom: 2px solid var(--primary-neon);
+    }
+
+    .nav-tabs .nav-link.active {
+        background: rgba(0, 243, 255, 0.1);
+        color: var(--primary-neon);
+        border-bottom: 2px solid var(--primary-neon);
+    }
+
+    /* Light Theme Override */
+    body.light-theme {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%) !important;
+        color: #333 !important;
+    }
+
+    body.light-theme .cyber-card {
+        background: rgba(255, 255, 255, 0.9) !important;
+        border: 1px solid #ddd !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    body.light-theme .cyber-card-body {
+        color: #333 !important;
+    }
+
+    body.light-theme .navbar {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    }
+
+    body.light-theme .form-control,
+    body.light-theme .form-select {
+        background: #fff !important;
+        color: #333 !important;
+        border: 1px solid #ddd !important;
+    }
+
+    body.light-theme .table {
+        color: #333 !important;
+    }
+
+    body.light-theme .table-dark {
+        background: #f8f9fa !important;
+    }
+
+    body.light-theme .table-dark thead tr {
+        border-bottom: 2px solid #667eea !important;
+    }
+
+    body.light-theme .badge {
+        color: #fff !important;
+    }
+
+    body.light-theme h1,
+    body.light-theme h2,
+    body.light-theme h3,
+    body.light-theme h4,
+    body.light-theme h5,
+    body.light-theme h6 {
+        color: #667eea !important;
+    }
+
+    body.light-theme .neon-heading {
+        color: #667eea !important;
+        text-shadow: none !important;
+    }
+
+    body.light-theme .text-muted {
+        color: #6c757d !important;
+    }
+
+    body.light-theme .btn-cyber {
+        background: linear-gradient(135deg, #667eea, #764ba2) !important;
+        border: none !important;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4) !important;
+    }
+
+    body.light-theme .btn-outline-light {
+        color: #667eea !important;
+        border-color: #667eea !important;
+    }
+
+    body.light-theme .btn-outline-light:hover {
+        background: #667eea !important;
+        color: #fff !important;
+    }
+
+    body.light-theme .kpi-card {
+        background: rgba(255, 255, 255, 0.9) !important;
+        border-left: 4px solid #667eea !important;
+    }
+
+    body.light-theme .alert-info {
+        background: #e7f3ff !important;
+        color: #004085 !important;
+        border-color: #b8daff !important;
+    }
+
+    body.light-theme .border-secondary {
+        border-color: #ddd !important;
+    }
+
+    /* Smooth transitions */
+    body,
+    .cyber-card,
+    .form-control,
+    .btn,
+    .table,
+    .navbar {
+        transition: all 0.3s ease;
+    }
+</style>
+
+<script>
+    // Dark Mode Toggle Functionality
+    document.addEventListener('DOMContentLoaded', function () {
+        const darkModeToggle = document.getElementById('darkMode');
+        if (!darkModeToggle) return;
+
+        // Check saved preference
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+
+        // Apply saved theme
+        if (savedTheme === 'light') {
+            document.body.classList.add('light-theme');
+            darkModeToggle.checked = false;
+        } else {
+            document.body.classList.remove('light-theme');
+            darkModeToggle.checked = true;
+        }
+
+        // Listen for toggle changes
+        darkModeToggle.addEventListener('change', function () {
+            if (this.checked) {
+                // Switch to dark theme
+                document.body.classList.remove('light-theme');
+                localStorage.setItem('theme', 'dark');
+                showThemeNotification('🌙 Dark Mode Activated', 'Cyber theme enabled');
+            } else {
+                // Switch to light theme
+                document.body.classList.add('light-theme');
+                localStorage.setItem('theme', 'light');
+                showThemeNotification('☀️ Light Mode Activated', 'Professional theme enabled');
+            }
+        });
+    });
+
+    function showThemeNotification(title, message) {
+        // Create notification
+        const notification = document.createElement('div');
+        notification.className = 'alert alert-success position-fixed';
+        notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px; animation: slideInRight 0.3s ease-out;';
+        notification.innerHTML = `
+            <strong>${title}</strong><br>
+            ${message}
+        `;
+
+        document.body.appendChild(notification);
+
+        // Auto remove after 2 seconds
+        setTimeout(() => {
+            notification.style.animation = 'slideOutRight 0.3s ease-out';
+            setTimeout(() => notification.remove(), 300);
+        }, 2000);
+    }
+
+    // Add animation keyframes
+    if (!document.querySelector('style[data-theme-animations]')) {
+        const style = document.createElement('style');
+        style.setAttribute('data-theme-animations', 'true');
+        style.textContent = `
+            @keyframes slideInRight {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOutRight {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+</script>
+
+{% endblock %}
